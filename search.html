@@ -1,1 +1,46 @@
-Suche
+<!-- Ausschnitt für search.html -->
+<div>
+  <label>Artikelnummer:
+    <input id="artnr" type="text" placeholder="z. B. ABC12DEF">
+  </label>
+  <button id="btnLookup">Suchen</button>
+</div>
+
+<div id="result" style="margin-top:12px; display:none;">
+  <h3 id="title"></h3>
+  <img id="prodImg" alt="Artikelbild" style="max-height:200px; display:block; margin-bottom:8px;">
+  <div id="price"></div>
+  <div><a id="productLink" target="_blank" rel="noreferrer">Zur Produktseite</a></div>
+</div>
+
+<script>
+document.getElementById('btnLookup').addEventListener('click', async () => {
+  const art = document.getElementById('artnr').value.trim();
+  if (!art) return alert('Bitte Artikelnummer eingeben');
+  const resDiv = document.getElementById('result');
+  resDiv.style.display = 'none';
+
+  const r = await fetch('/api/lookup', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({article: art})
+  });
+  if (!r.ok) {
+    const err = await r.json().catch(()=>({message:'Fehler'}));
+    return alert('Fehler: ' + (err.message || r.status));
+  }
+  const data = await r.json();
+  if (!data.found) {
+    return alert('Kein Treffer: ' + (data.message || '—'));
+  }
+  document.getElementById('title').innerText = data.title_guess || data.requested_article;
+  const imgEl = document.getElementById('prodImg');
+  // Wenn das Backend das Bild lokal gespeichert hat, nutze das lokale Pfad; sonst externe URL
+  imgEl.src = data.image_local || data.image_url || '';
+  document.getElementById('price').innerText = data.price_raw || 'Preis nicht gefunden';
+  const a = document.getElementById('productLink');
+  a.href = data.product_url || '#';
+  a.innerText = data.product_url ? 'Produktseite öffnen' : '';
+  resDiv.style.display = 'block';
+});
+</script>
