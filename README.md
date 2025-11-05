@@ -1,0 +1,2 @@
+# mobileInfo
+Artikel Info
