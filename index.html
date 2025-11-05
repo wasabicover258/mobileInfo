@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Installations-Button</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,73 +13,49 @@
       height: 100vh;
       background: #f2f2f2;
     }
-    .login-box {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      width: 100%;
-      padding: 8px;
-      background: #333;
+    #installBtn {
+      padding: 12px 20px;
+      background: #0066cc;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-bottom: 10px;
-    }
-    #installBtn {
-      display: none;
-      background: #007700;
-    }
-    #msg {
-      color: red;
-      margin-top: 10px;
+      font-size: 16px;
+      display: none; /* standard: später eingeblendet */
     }
   </style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>Login</h2>
-    <input type="password" id="pw" placeholder="Passwort eingeben">
-    <button onclick="checkPw()">Enter</button>
-    <button id="installBtn">App installieren</button>
-    <div id="msg"></div>
-  </div>
+
+  <button id="installBtn">Zum Startbildschirm hinzufügen</button>
 
   <script>
-    // Login-Check nach altem Muster
-    function checkPw() {
-      const pw = document.getElementById('pw').value;
-      if (pw === '09Cartier#09') {
-        window.location.href = 'search.html';
-      } else {
-        document.getElementById('msg').innerText = 'Passwort falsch. Bitte wenden Sie sich an Ihre Niederlassung.';
-      }
+    // Erkennen, ob wir als Verknüpfung / PWA laufen
+    function isStandalone() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     }
 
-    // PWA-Installationslogik
+    const installBtn = document.getElementById('installBtn');
     let installPrompt;
 
-    window.addEventListener("beforeinstallprompt", e => {
-      e.preventDefault();
-      installPrompt = e;
-      document.getElementById("installBtn").style.display = "block";
-    });
+    // Wenn im Homescreen-Modus → Button unsichtbar lassen
+    if (!isStandalone()) {
+      // Browser wird die Installation anbieten (nur wenn Voraussetzungen erfüllt sind)
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        installPrompt = e;
+        installBtn.style.display = 'inline-block';
+      });
+    }
 
-    document.getElementById("installBtn").addEventListener("click", async () => {
+    installBtn.addEventListener('click', async () => {
+      if (!installPrompt) return;
       installPrompt.prompt();
-      const choice = await installPrompt.userChoice;
+      await installPrompt.userChoice;
       installPrompt = null;
+      installBtn.style.display = 'none';
     });
   </script>
+
 </body>
 </html>
