@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SALES HUB – NL09</title>
+  <title>InfoHub</title>
   <style>
     :root{
       --brand:#b3132d;          /* Grundrot */
@@ -85,6 +85,17 @@
         color: #9aa0a6;
     }
 
+    /*Sektion zu link machen*/
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    a section {
+      display: block;
+      cursor: pointer;
+    }
+
     /* Kartenliste */
     .top-card{
       display:grid; 
@@ -128,12 +139,28 @@
         object-fit:contain; 
     }
 
+    .top-card h2{ 
+        margin:0; 
+        font-size:28px; 
+        font-weight:900; 
+        letter-spacing:.5px; 
+        color:#8c0f24; 
+    }
+
     .card h2{ 
         margin:0; 
         font-size:28px; 
         font-weight:900; 
         letter-spacing:.5px; 
         color:#8c0f24; 
+    }
+
+    .top-card .subtitle{ 
+        margin-top:2px; 
+        font-size:28px; 
+        font-weight:800; 
+        color:#ff054a; 
+        letter-spacing:.5px; 
     }
 
     .card .subtitle{ 
@@ -370,6 +397,7 @@
 
     <!-- Karte: Niederlassungs Terminplaner -->
     <section>
+      <a href="search.html">
       <div class="top-card">
         <div class="icon-wrap">
           <img src="images/watch.png" alt="Kalender-Icon" />
@@ -379,6 +407,7 @@
           <div class="subtitle">ARTIKEL-INFO</div>
         </div>
       </div>
+      </a>
       <div class="TextField">
         <form onsubmit="goToArticle(event)">
             <input type="text" id="articleNumber" placeholder="00XX0000">
@@ -388,11 +417,12 @@
       <hr class="sep" />
     </section>
 
-    <!-- Karte: Follow Up (ausgegraut) -->
+    <!-- Karte: Posteingangs-Erfassung -->
+    <a href="search.html">
     <section>
       <div class="card">
         <div class="icon-wrap">
-          <img src="images/map.png" alt="E-Mail-Icon" />
+            <img src="images/map.png" alt="Posteingang-Icon" />
         </div>
         <div>
           <h2>NIEDERLASSUNGS</h2>
@@ -401,20 +431,23 @@
       </div>
       <hr class="sep" />
     </section>
+    </a>
 
     <!-- Karte: Posteingangs-Erfassung -->
+    <a href="search.html">
     <section>
       <div class="card">
         <div class="icon-wrap">
-          <img src="images/gear.png" alt="Posteingang-Icon" />
+            <img src="images/gear.png" alt="Posteingang-Icon" />
         </div>
         <div>
-          <h2>POSTEINGANGS-</h2>
-          <div class="subtitle">ERFASSUNG</div>
+          <h2>WEITERE</h2>
+          <div class="subtitle">RESSOURCEN</div>
         </div>
       </div>
       <hr class="sep" />
     </section>
+    </a>
 
   <footer class="footer">
     <img src="images/logo.png" alt="" class="footer-icon">
