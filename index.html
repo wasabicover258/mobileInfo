@@ -271,94 +271,94 @@
     }
 
     .footer {
-  position: relative;
-  text-align: center;
-  margin: 40px 0;
-}
+      position: relative;
+      text-align: center;
+      margin: 40px 0;
+    }
 
-.footer-icon {
-  height: 30px; /* anpassen nach Bedarf */
-  vertical-align: middle;
-  background: #fff; /* sorgt dafür, dass die Linien hinter dem PNG weg sind */
-  padding: 0 10px;
-}
+    .footer-icon {
+      height: 30px; /* anpassen nach Bedarf */
+      vertical-align: middle;
+      background: #fff; /* sorgt dafür, dass die Linien hinter dem PNG weg sind */
+      padding: 0 10px;
+    }
 
-.footer::before,
-.footer::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 45%;
-  height: 1px;
-  background: #ccc; /* feines Grau */
-}
+    .footer::before,
+    .footer::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 45%;
+      height: 1px;
+      background: #ccc; /* feines Grau */
+    }
 
-.footer::before {
-  left: 0;
-}
+    .footer::before {
+      left: 0;
+    }
 
-.footer::after {
-  right: 0;
-}
+    .footer::after {
+      right: 0;
+    }
 
 
-/* Proportionale Verkleinerung auf kleinen Displays – alles bleibt im Verhältnis */
-@media (max-width: 420px) {
-  :root { --m: .85; } /* Skalierungsfaktor: 0.85 = 85% der Originalgrößen */
+    /* Proportionale Verkleinerung auf kleinen Displays – alles bleibt im Verhältnis */
+    @media (max-width: 420px) {
+      :root { --m: .85; } /* Skalierungsfaktor: 0.85 = 85% der Originalgrößen */
 
-  .appbar-inner { padding: calc(18px*var(--m)) calc(16px*var(--m)); }
-  .brand img { width: calc(44px*var(--m)); height: calc(44px*var(--m)); }
-  .brand .title .top { font-size: calc(28px*var(--m)); }
-  .brand .title .sub { font-size: calc(24px*var(--m)); }
+      .appbar-inner { padding: calc(18px*var(--m)) calc(16px*var(--m)); }
+      .brand img { width: calc(44px*var(--m)); height: calc(44px*var(--m)); }
+      .brand .title .top { font-size: calc(28px*var(--m)); }
+      .brand .title .sub { font-size: calc(24px*var(--m)); }
 
-  .menu { width: calc(40px*var(--m)); height: calc(32px*var(--m)); gap: calc(6px*var(--m)); }
-  .menu span { height: calc(4px*var(--m)); border-radius: calc(2px*var(--m)); }
+      .menu { width: calc(40px*var(--m)); height: calc(32px*var(--m)); gap: calc(6px*var(--m)); }
+      .menu span { height: calc(4px*var(--m)); border-radius: calc(2px*var(--m)); }
 
-  main { padding: 8px calc(16px*var(--m)) calc(40px*var(--m)); }
+      main { padding: 8px calc(16px*var(--m)) calc(40px*var(--m)); }
 
-  .hello { font-size: calc(23px*var(--m)); margin: calc(16px*var(--m)) 0 calc(24px*var(--m)); }
+      .hello { font-size: calc(23px*var(--m)); margin: calc(16px*var(--m)) 0 calc(24px*var(--m)); }
 
-  .top-card,
-  .card {
-    grid-template-columns: calc(84px*var(--m)) 1fr;
-    gap: calc(14px*var(--m));
-    padding: calc(18px*var(--m)) calc(12px*var(--m));
-    border-radius: calc(16px*var(--m));
-    margin-top: calc(30px*var(--m));
-    margin-bottom: calc(30px*var(--m));
-  }
+      .top-card,
+      .card {
+        grid-template-columns: calc(84px*var(--m)) 1fr;
+        gap: calc(14px*var(--m));
+        padding: calc(18px*var(--m)) calc(12px*var(--m));
+        border-radius: calc(16px*var(--m));
+        margin-top: calc(30px*var(--m));
+        margin-bottom: calc(30px*var(--m));
+      }
 
-  .icon-wrap { width: calc(84px*var(--m)); height: calc(84px*var(--m)); border-radius: calc(12px*var(--m)); }
-  .icon-wrap img { width: calc(64px*var(--m)); height: calc(64px*var(--m)); }
+      .icon-wrap { width: calc(84px*var(--m)); height: calc(84px*var(--m)); border-radius: calc(12px*var(--m)); }
+      .icon-wrap img { width: calc(64px*var(--m)); height: calc(64px*var(--m)); }
 
-  .card h2 { font-size: calc(28px*var(--m)); }
-  .card .subtitle { font-size: calc(28px*var(--m)); }
+      .card h2 { font-size: calc(28px*var(--m)); }
+      .card .subtitle { font-size: calc(28px*var(--m)); }
 
-  .history-link a {
-    gap: calc(12px*var(--m));
-    padding: calc(10px*var(--m)) calc(14px*var(--m));
-    border-radius: 999px;
-  }
-  .history-icon {
-    width: calc(22px*var(--m));
-    height: calc(22px*var(--m));
-    border-width: calc(2px*var(--m));
-    border-radius: calc(6px*var(--m));
-  }
-  .TextField form { gap: calc(8px*var(--m)); }
-  .TextField input {
-    padding: calc(8px*var(--m)) calc(12px*var(--m));
-    font-size: calc(16px*var(--m));
-    border-radius: 999px;
-  }
-  .TextField button { padding: calc(8px*var(--m)) calc(14px*var(--m)); }
+      .history-link a {
+        gap: calc(12px*var(--m));
+        padding: calc(10px*var(--m)) calc(14px*var(--m));
+        border-radius: 999px;
+      }
+      .history-icon {
+        width: calc(22px*var(--m));
+        height: calc(22px*var(--m));
+        border-width: calc(2px*var(--m));
+        border-radius: calc(6px*var(--m));
+      }
+      .TextField form { gap: calc(8px*var(--m)); }
+      .TextField input {
+        padding: calc(8px*var(--m)) calc(12px*var(--m));
+        font-size: calc(16px*var(--m));
+        border-radius: 999px;
+      }
+      .TextField button { padding: calc(8px*var(--m)) calc(14px*var(--m)); }
 
-  hr.sep { margin: calc(16px*var(--m)) 0; }
+      hr.sep { margin: calc(16px*var(--m)) 0; }
 
-  .footer { margin: calc(40px*var(--m)) 0; }
-  .footer-icon { height: calc(30px*var(--m)); padding: 0 calc(10px*var(--m)); }
-  .footer::before, .footer::after { height: 1px; } /* bleibt fein */
-}
+      .footer { margin: calc(40px*var(--m)) 0; }
+      .footer-icon { height: calc(30px*var(--m)); padding: 0 calc(10px*var(--m)); }
+      .footer::before, .footer::after { height: 1px; } /* bleibt fein */
+    }
 
   </style>
 </head>
