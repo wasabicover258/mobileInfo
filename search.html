@@ -1,46 +1,31 @@
-<!-- Ausschnitt für search.html -->
-<div>
-  <label>Artikelnummer:
-    <input id="artnr" type="text" placeholder="z. B. ABC12DEF">
-  </label>
-  <button id="btnLookup">Suchen</button>
-</div>
-
-<div id="result" style="margin-top:12px; display:none;">
-  <h3 id="title"></h3>
-  <img id="prodImg" alt="Artikelbild" style="max-height:200px; display:block; margin-bottom:8px;">
-  <div id="price"></div>
-  <div><a id="productLink" target="_blank" rel="noreferrer">Zur Produktseite</a></div>
-</div>
-
-<script>
-document.getElementById('btnLookup').addEventListener('click', async () => {
-  const art = document.getElementById('artnr').value.trim();
-  if (!art) return alert('Bitte Artikelnummer eingeben');
-  const resDiv = document.getElementById('result');
-  resDiv.style.display = 'none';
-
-  const r = await fetch('/api/lookup', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({article: art})
-  });
-  if (!r.ok) {
-    const err = await r.json().catch(()=>({message:'Fehler'}));
-    return alert('Fehler: ' + (err.message || r.status));
-  }
-  const data = await r.json();
-  if (!data.found) {
-    return alert('Kein Treffer: ' + (data.message || '—'));
-  }
-  document.getElementById('title').innerText = data.title_guess || data.requested_article;
-  const imgEl = document.getElementById('prodImg');
-  // Wenn das Backend das Bild lokal gespeichert hat, nutze das lokale Pfad; sonst externe URL
-  imgEl.src = data.image_local || data.image_url || '';
-  document.getElementById('price').innerText = data.price_raw || 'Preis nicht gefunden';
-  const a = document.getElementById('productLink');
-  a.href = data.product_url || '#';
-  a.innerText = data.product_url ? 'Produktseite öffnen' : '';
-  resDiv.style.display = 'block';
-});
-</script>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wempe Artikel Weiterleitung</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f6f6;margin:0;padding:24px}
+    .wrap{max-width:460px;margin:0 auto;background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:20px}
+    input,button{padding:10px;border:1px solid #ccc;border-radius:6px;width:100%;margin-bottom:10px}
+    button{cursor:pointer;background:#333;color:#fff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Artikelnummer eingeben</h2>
+    <input id="art" placeholder="z. B. 50AH0916" autofocus />
+    <button id="go">Weiterleiten</button>
+  </div>
+  <script>
+    function go(){
+      const art=document.getElementById('art').value.trim();
+      if(!art) return;
+      const url=`https://www.wempe.com/de-de/search?sSearch=${encodeURIComponent(art)}`;
+      window.location.href=url;
+    }
+    document.getElementById('go').onclick=go;
+    document.getElementById('art').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+  </script>
+</body>
+</html>
