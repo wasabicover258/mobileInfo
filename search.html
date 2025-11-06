@@ -134,6 +134,14 @@
         background: #fff !important;   /* zwingt Weiß dahinter */
     }
 
+    @supports (-webkit-touch-callout: none) {
+        .custom-select select,
+        .custom-select select option {
+            color: #8c0e24 !important;
+            -webkit-text-fill-color: #8c0e24;
+        }
+    }
+
     /* Weißes Chevron im roten Block */
     .custom-select::before{
         content: "";
