@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>InfoHub – Wempe Uhren-/Schmucksuche</title>
+  <style>
+    :root{
+      --brand:#b3132d; --brand-dark:#8c0f24; --text:#2b2b2b; --muted:#9aa0a6;
+      --divider:#e9e9e9; --bg:#ffffff;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0; width:100%; background:var(--bg); color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Appbar */
+    .appbar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--divider);}
+    .appbar-inner{max-width:900px;margin:0 auto;padding:18px 16px;display:flex;align-items:center;justify-content:space-between;}
+    .brand{display:flex;gap:12px;align-items:center;}
+    .brand img{width:44px;height:44px;object-fit:contain;}
+    .brand .title .top{font-weight:800;letter-spacing:1px;font-size:28px;color:#8c0f24;}
+    .brand .title .sub{font-weight:700;font-size:24px;color:#ff054a;}
+    .menu{width:40px;height:32px;display:grid;gap:6px;cursor:pointer;}
+    .menu span{background:var(--brand);height:4px;border-radius:2px;display:block;}
+
+    main{max-width:900px;margin:0 auto;padding:8px 16px 40px;}
+    .back-btn{display:inline-block;padding:12px 22px;background:#a6a6a6;color:#fff;text-decoration:none;font-weight:600;border-radius:999px;transition:background .15s;}
+    .back-btn:hover{background:#b3132d;}
+    .back-btn:active{background:#5e0a19;position:relative;top:1px;}
+
+    /* Karten */
+    .card{background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(0,0,0,.06);padding:20px;border:1px solid var(--divider);}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:end;}
+    h1{font-size:1.6rem;margin:0 0 1rem;}
+    label{display:block;font-size:.9rem;margin-bottom:6px;color:#555;}
+    select{min-width:260px;padding:10px 12px;border-radius:10px;border:1px solid #d0d0d0;background:#fff;font-size:1rem;}
+    input[type="text"]{min-width:300px;padding:10px 12px;border-radius:10px;border:1px solid #d0d0d0;background:#fff;font-size:1rem;}
+    button{padding:12px 18px;border-radius:10px;border:0;background:#222;color:#fff;font-weight:600;cursor:pointer;}
+    button:disabled{opacity:.5;cursor:not-allowed;}
+    .hint{margin-top:12px;font-size:.9rem;color:#666;}
+    .hidden{display:none!important;}
+
+    /* Toggle */
+    .toggle-wrap{margin:18px 0 28px;}
+    .toggle{width:100%;height:56px;position:relative;user-select:none;outline:none;}
+    .track{width:100%;height:100%;background:#a7a7a7;border-radius:100vmax;position:relative;overflow:hidden;}
+    .slider{position:absolute;top:0;left:0;width:62%;height:100%;background:#8c0f24;border-radius:100vmax;display:flex;align-items:center;justify-content:center;transition:left .28s ease;cursor:pointer;}
+    .toggle[data-state="uhren"] .slider{left:0}
+    .toggle[data-state="schmuck"] .slider{left:calc(100% - 62%)}
+    .slider .active{color:#fff;font-weight:600;font-size:clamp(24px,4.5vw,44px)}
+  </style>
+</head>
+<body>
+
+<header class="appbar" role="banner">
+  <div class="appbar-inner">
+    <div class="brand">
+      <img src="images/info.png" alt="Logo" />
+      <div class="title">
+        <div class="top">INFO</div>
+        <div class="sub">HUB – NL09</div>
+      </div>
+    </div>
+    <div class="menu" aria-label="Menü"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<main>
+  <a href="index.html" class="back-btn">← Startseite</a>
+
+  <!-- Toggle -->
+  <div class="toggle-wrap">
+    <div class="toggle" role="switch" aria-checked="false" tabindex="0" data-state="uhren" aria-label="Auswahl: UHREN oder SCHMUCK">
+      <div class="track">
+        <div class="slider"><span class="active">UHREN</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Überschrift bleibt gleich -->
+  <h1>Wempe – Uhren nach Marke & Kollektion</h1>
+
+  <!-- Uhren-Hauptsuche -->
+  <div id="uhrenSearch" class="card">
+    <div class="row">
+      <div>
+        <label for="brand">Marke</label>
+        <select id="brand">
+          <option value="">– Marke wählen –</option>
+        </select>
+      </div>
+      <div>
+        <label for="collection">Kollektion</label>
+        <select id="collection" disabled>
+          <option value="">– Kollektion wählen (optional) –</option>
+        </select>
+      </div>
+      <div><button id="searchBtn" disabled>Suche</button></div>
+    </div>
+    <p class="hint">Tipp: Erst Marke wählen, dann – falls gewünscht – die passende Kollektion. Anschließend „Suche“.</p>
+  </div>
+
+  <!-- Schmuck-Platzhalter (steht ÜBER der Stichwortsuche) -->
+  <div id="schmuckPlaceholder" class="card hidden" style="margin-top:16px;">
+    <p>Schmuck – (Platzhalter). Hier kommt später deine Schmucksuche/Navigation hin.</p>
+  </div>
+
+  <!-- Stichwortsuche -->
+  <div class="card" style="margin-top:16px;">
+    <div class="row">
+      <div style="flex:1 1 420px; min-width:320px;">
+        <label for="kw">Stichwortsuche (z. B. „Ewiger Kalender“)</label>
+        <input type="text" id="kw" placeholder="Begriff eingeben…" />
+      </div>
+      <div><button id="kwBtn" disabled>Suchen</button></div>
+    </div>
+    <p class="hint">Leitet auf die Wempe-Suche weiter, z. B. <code>/search?sSearch=ewiger+kalender</code>.</p>
+
+    <!-- Schnell-Buttons (werden je nach Modus umgeschaltet) -->
+    <div class="card" style="margin-top:16px;">
+      <div id="quickRow" class="row" style="flex-wrap:wrap;">
+        <button id="quick1">GMT</button>
+        <button id="quick2">Taucher</button>
+        <button id="quick3">Chronograph</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // --- Toggle-Logik + Sichtbarkeit ---
+  const toggleEl = document.querySelector('.toggle');
+  const slider = toggleEl.querySelector('.slider');
+  const uhrenCard = document.getElementById('uhrenSearch');
+  const schmuckPlaceholder = document.getElementById('schmuckPlaceholder');
+
+  function setMode(mode){
+    const isSchmuck = (mode === 'schmuck');
+    toggleEl.setAttribute('data-state', mode);
+    toggleEl.setAttribute('aria-checked', String(isSchmuck));
+    toggleEl.querySelector('.slider .active').textContent = isSchmuck ? 'SCHMUCK' : 'UHREN';
+    // Sichtbarkeit: Uhrensuche ausblenden, Schmuck-Platzhalter einblenden
+    uhrenCard.classList.toggle('hidden', isSchmuck);
+    schmuckPlaceholder.classList.toggle('hidden', !isSchmuck);
+    // Buttons an Modus anpassen
+    updateQuickButtons(mode);
+  }
+
+  function flip(){
+    const cur = toggleEl.getAttribute('data-state');
+    const next = (cur === 'schmuck') ? 'uhren' : 'schmuck';
+    setMode(next);
+  }
+  slider.addEventListener('click', flip);
+  toggleEl.addEventListener('keydown', e=>{
+    if(e.key==='Enter' || e.key===' '){ e.preventDefault(); flip(); }
+  });
+
+  // --- Datenbasis Uhren (Slugs exakt wie geliefert) ---
+  const DATA = {
+    "baume-mercier": ["riviera","hampton","clifton-baumatic","classima"],
+    "breguet": ["classique","classique-grandes-complications","marine","reine-de-naples","tradition","type-xx"],
+    "breitling": ["avenger","classic-avi","super-avi","chronomat","navitimer-1","premier","professional","superocean","superocean-heritage","top-time"],
+    "cartier": ["baignoire","ballon-bleu-de-cartier","panthere-de-cartier","pasha-de-cartier","ronde-de-cartier","santos-de-cartier","tank-de-cartier"],
+    "chanel": ["premiere","boy-friend","j12"],
+    "chopard": ["alpine-eagle","classic","happy-sport","l-heure-du-diamant","mille-miglia"],
+    "ebel": ["1911","brasilia","discovery","sport-classic","wave"],
+    "erwin-sattler": ["grossuhren-erwin-sattler"],
+    "girard-perregaux": ["laureato","1966","bridges","cat-s-eye","casquette-2-0"],
+    "iwc-schaffhausen": ["pilot-s-watches","portugieser","portofino","aquatimer","ingenieur"],
+    "jaboc-co": ["astronomia-regulator","bugatti-chiron-tourbillon","casino","epic-x-skeleton","opera","palatial","sf24","time-zone"],
+    "jaeger-lecoultre": ["jaeger-lecoultre-polaris","master","rendez-vous","reverso"],
+    "junghans": ["mesiter","max-bill","form"],
+    "longines": ["conquest","elegance","heritage","hydroconquest","longines-ultra-chron","longines-spirit","watchmaking-spirit"],
+    "montblanc": ["1858","boheme","heritage-chronometrie","star-legacy","tradition"],
+    "nomos-glashuette": ["ahoi","autobahn","club","ludwig","metro","minimatik","orion","sonnenuhr","tangomat","tangente","tetra","zürich"],
+    "norqain": ["independence","adventure-sport","freedom-60"],
+    "panerai": ["radiomir","luminor","luminor-due","submersible"],
+    "parmigiani-fleurier": ["tonda","toric"],
+    "rolex": ["air-king","cosmograph-daytona","datejust","day-date","deepsea","explorer","gmt-master-ii","lady-datejust","land-dweller","oyster-perpetual","sea-dweller","sky-dweller","submariner","yacht-master"],
+    "tag-heuer": ["aquaracer","autavia","connected","monaco","carrera","formula-1"],
+    "tudor": ["black-bay","claire-de-rose","tudor-royal","1926","pelagos","ranger"],
+    "wempe-glashütte-i-sa": ["chronometerwerke","iron-walker","zeitmeister-fliegeruhren","zeitmeister-komplikationen","zeitmeister-automatik","zeitmeister-quarz","zeitmeister-manchette","wempe-glashuette-i-sa-limitierte-editionen"]
+  };
+
+  const BRAND_LABEL_OVERRIDES = {
+    "baume-mercier":"Baume & Mercier","iwc-schaffhausen":"IWC Schaffhausen",
+    "jaeger-lecoultre":"Jaeger-LeCoultre","girard-perregaux":"Girard-Perregaux",
+    "parmigiani-fleurier":"Parmigiani Fleurier","tag-heuer":"TAG Heuer",
+    "nomos-glashuette":"NOMOS Glashütte","wempe-glashütte-i-sa":"Wempe Glashütte i/SA",
+    "jaboc-co":"Jacob & Co"
+  };
+  const COLLECTION_LABEL_OVERRIDES = {
+    "classique-grandes-complications":"Classique Grandes Complications","cat-s-eye":"Cat's Eye","casquette-2-0":"Casquette 2.0",
+    "pilot-s-watches":"Pilot's Watches","l-heure-du-diamant":"L'Heure du Diamant","navitimer-1":"Navitimer 1","super-avi":"Super AVI","top-time":"Top Time",
+    "boy-friend":"Boy·Friend","jaeger-lecoultre-polaris":"Polaris","mesiter":"Meister","longines-ultra-chron":"Ultra-Chron","sf24":"SF24","time-zone":"Time Zone",
+    "black-bay":"Black Bay","iron-walker":"Iron Walker","zeitmeister-quarz":"Zeitmeister Quarz","zeitmeister-automatik":"Zeitmeister Automatik",
+    "zeitmeister-komplikationen":"Zeitmeister Komplikationen","zeitmeister-fliegeruhren":"Zeitmeister Fliegeruhren",
+    "wempe-glashuette-i-sa-limitierte-editionen":"Wempe Glashütte i/SA – Limitierte Editionen",
+    "formula-1":"Formula 1","gmt-master-ii":"GMT-Master II","oyster-perpetual":"Oyster Perpetual","sea-dweller":"Sea-Dweller","sky-dweller":"Sky-Dweller",
+    "yacht-master":"Yacht-Master","lady-datejust":"Lady-Datejust","air-king":"Air-King"
+  };
+
+  function toTitleCase(s){ return s.replace(/[-_/]+/g,' ').replace(/\s+/g,' ').trim().replace(/\w\S*/g,t=>t.charAt(0).toUpperCase()+t.slice(1)); }
+  function brandLabel(slug){ return BRAND_LABEL_OVERRIDES[slug] || toTitleCase(slug); }
+  function collectionLabel(slug){ return COLLECTION_LABEL_OVERRIDES[slug] || toTitleCase(slug); }
+
+  const brandSelect = document.getElementById('brand');
+  const collSelect  = document.getElementById('collection');
+  const searchBtn   = document.getElementById('searchBtn');
+
+  // Marken befüllen
+  Object.keys(DATA).sort((a,b)=>brandLabel(a).localeCompare(brandLabel(b),'de'))
+    .forEach(slug=>{
+      const opt=document.createElement('option');
+      opt.value=slug; opt.textContent=brandLabel(slug);
+      brandSelect.appendChild(opt);
+    });
+
+  // Kollektionen dynamisch
+  brandSelect.addEventListener('change',()=>{
+    const brand=brandSelect.value;
+    collSelect.innerHTML='<option value="">– Kollektion wählen (optional) –</option>';
+    if(!brand){ collSelect.disabled=true; searchBtn.disabled=true; return; }
+    const cols=DATA[brand]||[];
+    cols.slice().sort((a,b)=>collectionLabel(a).localeCompare(collectionLabel(b),'de')).forEach(cslug=>{
+      const opt=document.createElement('option'); opt.value=cslug; opt.textContent=collectionLabel(cslug);
+      collSelect.appendChild(opt);
+    });
+    collSelect.disabled=cols.length===0; searchBtn.disabled=false;
+  });
+
+  // Suche Marke/Kollektion
+  searchBtn.addEventListener('click',()=>{
+    const brand=brandSelect.value; if(!brand) return;
+    const coll=collSelect.value;
+    const base='https://www.wempe.com/de-de/uhren/';
+    let url=base+encodeURIComponent(brand)+'/';
+    if(coll){ url+=encodeURIComponent(coll)+'/'; }
+    window.location.href=url;
+  });
+
+  // Stichwortsuche
+  const kwInput=document.getElementById('kw');
+  const kwBtn=document.getElementById('kwBtn');
+  function normalizeQuery(q){ return encodeURIComponent(q.trim()).replace(/%20/g,'+'); }
+  function updateKwState(){ kwBtn.disabled = kwInput.value.trim().length===0; }
+  kwInput.addEventListener('input',updateKwState);
+  kwInput.addEventListener('keydown',e=>{ if(e.key==='Enter' && !kwBtn.disabled){ kwBtn.click(); }});
+  kwBtn.addEventListener('click',()=>{ const q=kwInput.value.trim(); if(!q) return;
+    const url='https://www.wempe.com/de-de/search?sSearch='+normalizeQuery(q); window.location.href=url; });
+
+  // Schnell-Buttons je Modus
+  const quick1=document.getElementById('quick1');
+  const quick2=document.getElementById('quick2');
+  const quick3=document.getElementById('quick3');
+  const QUICK_LINKS={
+    uhren:[
+      {label:'GMT',url:'https://www.wempe.com/de-de/uhren/gmt-uhren/'},
+      {label:'Taucher',url:'https://www.wempe.com/de-de/uhren/taucheruhren/'},
+      {label:'Chronograph',url:'https://www.wempe.com/de-de/uhren/chronographen/'}
+    ],
+    schmuck:[
+      {label:'Ringe',url:'https://www.wempe.com/de-de/schmuck/ringe/'},
+      {label:'Ohrringe',url:'https://www.wempe.com/de-de/schmuck/ohrringe/'},
+      {label:'Halsschmuck',url:'https://www.wempe.com/de-de/schmuck/ketten-colliers-anhaenger/'}
+    ]
+  };
+  function updateQuickButtons(mode){
+    const cfg=QUICK_LINKS[mode];
+    [quick1,quick2,quick3].forEach((btn,i)=>{
+      btn.textContent = cfg[i].label;
+      btn.onclick = ()=>window.location.href = cfg[i].url;
+    });
+  }
+
+  // Initialzustand
+  updateQuickButtons('uhren');
+  setMode('uhren');
+</script>
+</body>
+</html>
