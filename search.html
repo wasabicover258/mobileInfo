@@ -73,6 +73,26 @@
         width: 100%;
     }
 
+    /* Schnell-Buttons nebeneinander */
+    #quickRow {
+        display: flex;           /* eigenes Flex-Layout */
+        flex-direction: row;     /* Spalten-Regel überschreiben */
+        gap: 10px;
+        flex-wrap: wrap;         /* darf umbrechen, wenn wenig Platz */
+    }
+
+    /* Buttons im quickRow nicht full-width */
+    #quickRow button {
+        width: auto;             /* überschreibt .row button { width:100% } */
+        flex: 1 1 0;             /* gleich breit auf einer Zeile */
+        }
+
+    /* (optional) ab kleiner Breite 2 pro Zeile erzwingen */
+    @media (max-width: 420px) {
+    #quickRow button { flex: 1 1 calc(50% - 10px); }
+    }
+
+
     h1{font-size:1.6rem;margin:0 0 1rem;}
     label{display:block;font-size:.9rem;margin-bottom:6px;color:#555;}
 
@@ -161,10 +181,8 @@
         outline-offset: 2px;
     }
 
-
-
     input[type="text"]{min-width:300px;padding:10px 12px;border-radius:10px;border:1px solid #d0d0d0;background:#fff;font-size:1rem;}
-    button{padding:12px 18px;border-radius:10px;border:0;background:#222;color:#fff;font-weight:600;cursor:pointer;}
+    button{padding:12px 18px;border-radius:999px;border:0;background:#8c0e24;color:#fff;font-weight:600;cursor:pointer;}
     button:disabled{opacity:.5;cursor:not-allowed;}
     .hint{margin-top:12px;font-size:.9rem;color:#666;}
     .hidden{display:none!important;}
@@ -240,15 +258,14 @@
   </div>
 
   <!-- Stichwortsuche -->
-  <div class="card" style="margin-top:16px;">
+  <div class="card">
     <div class="row">
-      <div style="flex:1 1 420px; min-width:320px;">
-        <label for="kw">Stichwortsuche (z. B. „Ewiger Kalender“)</label>
+      <div>
+        <h2>STICHWORTSUCHE</h2>
         <input type="text" id="kw" placeholder="Begriff eingeben…" />
       </div>
       <div><button id="kwBtn" disabled>Suchen</button></div>
     </div>
-    <p class="hint">Leitet auf die Wempe-Suche weiter, z. B. <code>/search?sSearch=ewiger+kalender</code>.</p>
 
     <!-- Schnell-Buttons (werden je nach Modus umgeschaltet) -->
     <div class="card" style="margin-top:16px;">
