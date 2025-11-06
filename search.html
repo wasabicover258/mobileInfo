@@ -5,80 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wempe Uhren-Suche</title>
   <style>
-    :root{
-      --brand:#b3132d;          /* Grundrot */
-      --brand-dark:#8c0f24;     /* dunkleres Rot */
-      --text:#2b2b2b;
-      --muted:#9aa0a6;         /* ausgegrauter Text */
-      --divider:#e9e9e9;
-      --bg:#ffffff;
-    }
-    
-    html,body{height:100%;}
-    body{
-      margin:0;
-      width: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    body { margin: 0; padding: 24px; background: #f7f7f7; color: #222; }
     .wrap { max-width: 900px; margin: 0 auto; }
     h1 { font-size: 1.6rem; margin: 0 0 1rem; }
-
-    /* Obere App-Leiste */
-    .appbar{
-      position:sticky;top:0;z-index:10;
-      background:#fff;
-      border-bottom:1px solid var(--divider);
-    }
-    .appbar-inner{
-        width: 95%; margin:0;
-        padding:10px 16px; display:flex; align-items:center; justify-content:space-between;
-    }
-    .brand{
-      display:flex; gap:12px; align-items:center;
-    }
-    .brand img{ 
-        width:44px; 
-        height:44px; 
-        object-fit:contain;
-    }
-
-    .brand .title{ 
-        line-height:1.05; 
-    }
-
-    .brand .title .top{ 
-        font-weight:800; 
-        letter-spacing:1px; 
-        font-size:28px; 
-        color:#8c0f24;
-    }   
-
-    .brand .title .sub{ 
-        font-weight:700; 
-        font-size:24px; 
-        color:#ff054a;
-    }   
-
-    .menu{ 
-        width:40px; 
-        height:32px; 
-        display:grid; 
-        gap:6px; 
-        cursor:pointer; 
-    }
-
-    .menu span{ 
-        background:var(--brand); 
-        height:4px; 
-        border-radius:2px; 
-        display:block; 
-    }
-
     .card { background: #fff; border-radius: 14px; box-shadow: 0 2px 16px rgba(0,0,0,.06); padding: 20px; }
     .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
     label { display: block; font-size: .9rem; margin-bottom: 6px; color: #555; }
@@ -96,24 +26,43 @@
     .toggle[data-state="schmuck"] .slider{ left:calc(100% - 62%) }
     .slider .active{ color:#fff; font-weight:600; font-size:clamp(24px,4.5vw,44px) }
     .hidden{ display:none !important; }
+    
+    /* ===== Mobile-First Fixes (iPhone-friendly) ===== */
+    html, body { overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; }
+    img, svg, video { max-width: 100%; height: auto; display: block; }
+
+    /* Container passt sich immer der Bildschirmbreite an */
+    .wrap { width: 100%; max-width: 600px; padding: 12px; margin: 0 auto; }
+
+    /* Karten & Typo brechen sauber um */
+    .card { margin: 12px 0; word-break: break-word; overflow-wrap: anywhere; }
+
+    /* Flex-Zeilen füllen die Breite, Kinder werden untereinander gestapelt */
+    .row { width: 100%; align-items: stretch; }
+    .row > div { flex: 1 1 100%; min-width: 0; }
+
+    /* Formelemente nehmen volle Breite ein; keine starre min-width */
+    select, input[type="text"] { width: 100%; max-width: 100%; min-width: 0; }
+
+    /* Buttons sind auf dem Handy blockig und full‑width */
+    button { width: 100%; }
+
+    /* Toggle bleibt responsiv und schneidet nicht ab */
+    .toggle { width: 100%; }
+    .track { border-radius: 9999px; }
+    .slider { border-radius: 9999px; }
+
+    /* Ab Tabletbreite wieder etwas luftiger nebeneinander */
+    @media (min-width: 550px) {
+      .wrap { max-width: 900px; }
+      .row > div { flex: 1 1 260px; }
+      button { width: auto; }
+    }
   </style>
 </head>
 <body>
-
-    <header class="appbar" role="banner">
-        <div class="appbar-inner">
-            <div class="brand">
-                <img src="images/info.png" alt="Logo" />
-                <div class="title">
-                    <div class="top">INFO</div>
-                    <div class="sub">HUB – NL09</div>
-                </div>
-            </div>
-            <div class="menu" aria-label="Menü"><span></span><span></span><span></span></div>
-        </div>
-    </header>
-
-    <div class="wrap">
+  <div class="wrap">
     <!-- Toggle -->
     <div class="toggle-wrap">
       <div class="toggle" role="switch" aria-checked="false" tabindex="0" data-state="uhren" aria-label="Auswahl: UHREN oder SCHMUCK">
@@ -147,14 +96,6 @@
     </div>
     </div>
 
-    <!-- Schmuck-Platzhalter (verschoben) -->
-    <section id="schmuckPane" class="hidden" style="margin-top:16px;">
-      <h1>Schmuck – (Platzhalter)</h1>
-      <div class="card">
-        <p>Hier kommt später die Schmucksuche/Navigation hin.</p>
-      </div>
-    </section>
-
     <!-- Stichwortsuche -->
     <div class="card" style="margin-top:16px;">
       <div class="row">
@@ -173,6 +114,14 @@
             <button onclick="window.location.href='https://www.wempe.com/de-de/uhren/taucheruhren/';">Taucher</button>
             <button onclick="window.location.href='https://www.wempe.com/de-de/uhren/chronographen/';">Chronograph</button>
         </div></div></div></section>
+
+    <!-- Schmuck-Platzhalter (verschoben) -->
+    <section id="schmuckPane" class="hidden" style="margin-top:16px;">
+      <h1>Schmuck – (Platzhalter)</h1>
+      <div class="card">
+        <p>Hier kommt später die Schmucksuche/Navigation hin.</p>
+      </div>
+    </section>
 
     
 
