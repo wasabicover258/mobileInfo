@@ -77,19 +77,23 @@
     #quickRow {
         display: flex;           /* eigenes Flex-Layout */
         flex-direction: row;     /* Spalten-Regel überschreiben */
-        gap: 10px;
+        gap: 5px;
         flex-wrap: wrap;         /* darf umbrechen, wenn wenig Platz */
     }
 
     /* Buttons im quickRow nicht full-width */
     #quickRow button {
         width: auto;             /* überschreibt .row button { width:100% } */
-        flex: 1 1 0;             /* gleich breit auf einer Zeile */
-        }
+        flex: 0 0 calc(50% - 10px);             /* gleich breit auf einer Zeile */
+    }
 
     /* (optional) ab kleiner Breite 2 pro Zeile erzwingen */
     @media (max-width: 420px) {
     #quickRow button { flex: 1 1 calc(50% - 10px); }
+    }
+
+    #quickRow::-webkit-scrollbar {
+        display: none;
     }
 
 
@@ -253,6 +257,38 @@
     .toggle[data-state="uhren"] .slider{left:0}
     .toggle[data-state="schmuck"] .slider{left:calc(100% - 62%)}
     .slider .active{color:#fff;font-weight:600;font-size:clamp(24px,4.5vw,44px)}
+
+    .footer {
+      position: relative;
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .footer-icon {
+      height: 30px; /* anpassen nach Bedarf */
+      vertical-align: middle;
+      background: #fff; /* sorgt dafür, dass die Linien hinter dem PNG weg sind */
+      padding: 0 10px;
+    }
+
+    .footer::before,
+    .footer::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 45%;
+      height: 1px;
+      background: #ccc; /* feines Grau */
+    }
+
+    .footer::before {
+      left: 0;
+    }
+
+    .footer::after {
+      right: 0;
+    }
+
   </style>
 </head>
 <body>
@@ -260,10 +296,10 @@
 <header class="appbar" role="banner">
   <div class="appbar-inner">
     <div class="brand">
-      <img src="images/info.png" alt="Logo" />
+      <img src="images/watch.png" alt="Logo" />
       <div class="title">
-        <div class="top">INFO</div>
-        <div class="sub">HUB – NL09</div>
+        <div class="top">MOBILE</div>
+        <div class="sub">ARTIKEL-INFO – NL09</div>
       </div>
     </div>
     <div class="menu" aria-label="Menü"><span></span><span></span><span></span></div>
@@ -335,9 +371,14 @@
                 <button id="quick1">GMT</button>
                 <button id="quick2">Taucher</button>
                 <button id="quick3">Chronograph</button>
+                <button id="quick4">Flieger</button>
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <img src="images/logo.png" alt="" class="footer-icon">
+    </footer>
 </main>
 
 <script>
@@ -467,21 +508,24 @@
   const quick1=document.getElementById('quick1');
   const quick2=document.getElementById('quick2');
   const quick3=document.getElementById('quick3');
+  const quick4=document.getElementById('quick4');
   const QUICK_LINKS={
     uhren:[
       {label:'GMT',url:'https://www.wempe.com/de-de/uhren/gmt-uhren/'},
       {label:'Taucher',url:'https://www.wempe.com/de-de/uhren/taucheruhren/'},
-      {label:'Chronograph',url:'https://www.wempe.com/de-de/uhren/chronographen/'}
+      {label:'Chronograph',url:'https://www.wempe.com/de-de/uhren/chronographen/'},
+      {label:'Flieger',url:'https://www.wempe.com/de-de/uhren/fliegeruhren/'}
     ],
     schmuck:[
       {label:'Ringe',url:'https://www.wempe.com/de-de/schmuck/ringe/'},
       {label:'Ohrringe',url:'https://www.wempe.com/de-de/schmuck/ohrringe/'},
-      {label:'Halsschmuck',url:'https://www.wempe.com/de-de/schmuck/ketten-colliers-anhaenger/'}
+      {label:'Halsschmuck',url:'https://www.wempe.com/de-de/schmuck/ketten-colliers-anhaenger/'},
+      {label:'Armschmuck',url:'https://www.wempe.com/de-de/schmuck/armbaender-armreife/'}
     ]
   };
   function updateQuickButtons(mode){
     const cfg=QUICK_LINKS[mode];
-    [quick1,quick2,quick3].forEach((btn,i)=>{
+    [quick1,quick2,quick3,quick4].forEach((btn,i)=>{
       btn.textContent = cfg[i].label;
       btn.onclick = ()=>window.location.href = cfg[i].url;
     });
