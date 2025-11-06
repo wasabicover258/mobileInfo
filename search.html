@@ -17,7 +17,7 @@
     }
 
     h2 {
-        color: #ff054a;
+        color: #8c0e24;
         margin-top: 0%;
         margin-bottom: 0%;
     }
@@ -47,9 +47,6 @@
     .menu span{background:var(--brand);height:4px;border-radius:2px;display:block;}
 
     main{max-width:900px;margin:0 auto;padding:8px 16px 40px;}
-    .back-btn{display:inline-block;padding:12px 22px;background:#a6a6a6;color:#fff;text-decoration:none;font-weight:600;border-radius:999px;transition:background .15s;}
-    .back-btn:hover{background:#b3132d;}
-    .back-btn:active{background:#5e0a19;position:relative;top:1px;}
 
     /* Karten */
     .card{
@@ -75,7 +72,7 @@
     .row button {
         width: 100%;
     }
-    
+
     h1{font-size:1.6rem;margin:0 0 1rem;}
     label{display:block;font-size:.9rem;margin-bottom:6px;color:#555;}
 
@@ -113,6 +110,7 @@
     .custom-select select:disabled{
         cursor: not-allowed;
         opacity: .6;
+        color: #8c0e24;
     }
 
     /* Rechter roter Block */
@@ -125,6 +123,11 @@
         background: #d8001f;    /* Wempe-Rot */
         z-index: 2;             /* über dem Select */
         pointer-events: none;   /* Klicks gehen durch zum Select */
+    }
+
+    .custom-select select option {
+        color: #8c0e24 !important;     /* Farbe in der Dropdown-Liste */
+        background: #fff !important;   /* zwingt Weiß dahinter */
     }
 
     /* Weißes Chevron im roten Block */
@@ -180,8 +183,6 @@
 </header>
 
 <main>
-  <a href="index.html" class="back-btn">← Startseite</a>
-
   <!-- Toggle -->
   <div class="toggle-wrap">
     <div class="toggle" role="switch" aria-checked="false" tabindex="0" data-state="uhren" aria-label="Auswahl: UHREN oder SCHMUCK">
