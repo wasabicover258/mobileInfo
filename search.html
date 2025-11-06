@@ -13,6 +13,7 @@
     .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
     label { display: block; font-size: .9rem; margin-bottom: 6px; color: #555; }
     select { min-width: 260px; padding: 10px 12px; border-radius: 10px; border: 1px solid #d0d0d0; background: #fff; font-size: 1rem; }
+    input[type="text"] { min-width: 300px; padding: 10px 12px; border-radius: 10px; border: 1px solid #d0d0d0; background: #fff; font-size: 1rem; }
     button { padding: 12px 18px; border-radius: 10px; border: 0; background: #222; color: #fff; font-weight: 600; cursor: pointer; }
     button:disabled { opacity: .5; cursor: not-allowed; }
     .hint { margin-top: 12px; font-size: .9rem; color: #666; }
@@ -40,6 +41,21 @@
         </div>
       </div>
       <p class="hint">Tipp: Erst Marke wählen, dann – falls gewünscht – die passende Kollektion. Anschließend „Suche“.</p>
+    </div>
+    </div>
+
+    <!-- Stichwortsuche -->
+    <div class="card" style="margin-top:16px;">
+      <div class="row">
+        <div style="flex:1 1 420px; min-width:320px;">
+          <label for="kw">Stichwortsuche (z. B. „Ewiger Kalender“)</label>
+          <input type="text" id="kw" placeholder="Begriff eingeben…" />
+        </div>
+        <div>
+          <button id="kwBtn" disabled>Suchen</button>
+        </div>
+      </div>
+      <p class="hint">Leitet auf die Wempe-Suche weiter, z. B. <code>/search?sSearch=ewiger+kalender</code>.</p>
     </div>
   </div>
 
@@ -166,9 +182,7 @@
         });
       collSelect.disabled = cols.length === 0;
       searchBtn.disabled = false; // Mit Marke allein darf gesucht werden
-    });
-
-    // Suche
+    });    // Suche Marken/Kollektionen
     searchBtn.addEventListener('click', () => {
       const brand = brandSelect.value;
       if(!brand) return; // sollte nicht passieren, Button wäre disabled
@@ -176,6 +190,33 @@
       const base = 'https://www.wempe.com/de-de/uhren/';
       let url = base + encodeURIComponent(brand) + '/';
       if(coll){ url += encodeURIComponent(coll) + '/'; }
+      window.location.href = url;
+    });
+
+    // --- Stichwortsuche ---
+    const kwInput = document.getElementById('kw');
+    const kwBtn   = document.getElementById('kwBtn');
+
+    function normalizeQuery(q){
+      // Encode, dann Leerzeichen als +
+      return encodeURIComponent(q.trim()).replace(/%20/g,'+');
+    }
+
+    function updateKwState(){
+      kwBtn.disabled = kwInput.value.trim().length === 0;
+    }
+
+    kwInput.addEventListener('input', updateKwState);
+    kwInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' && !kwBtn.disabled){
+        kwBtn.click();
+      }
+    });
+
+    kwBtn.addEventListener('click', () => {
+      const q = kwInput.value.trim();
+      if(!q) return;
+      const url = 'https://www.wempe.com/de-de/search?sSearch=' + normalizeQuery(q);
       window.location.href = url;
     });
   </script>
