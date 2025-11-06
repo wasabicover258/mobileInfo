@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>InfoHub</title>
+  <style>
+    :root{
+      --brand:#b3132d;          /* Grundrot */
+      --brand-dark:#8c0f24;     /* dunkleres Rot */
+      --text:#2b2b2b;
+      --muted:#9aa0a6;         /* ausgegrauter Text */
+      --divider:#e9e9e9;
+      --bg:#ffffff;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      position: fixed;
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    /* Obere App-Leiste */
+    .appbar{
+      position:sticky;top:0;z-index:10;
+      background:#fff;
+      border-bottom:1px solid var(--divider);
+    }
+    .appbar-inner{
+      max-width:720px; margin:0 auto;
+      padding:18px 16px; display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+    }
+    .brand img{ 
+        width:44px; 
+        height:44px; 
+        object-fit:contain;
+    }
+
+    .brand .title{ 
+        line-height:1.05; 
+    }
+
+    .brand .title .top{ 
+        font-weight:800; 
+        letter-spacing:1px; 
+        font-size:28px; 
+        color:#8c0f24;
+    }   
+
+    .brand .title .sub{ 
+        font-weight:700; 
+        font-size:24px; 
+        color:#ff054a;
+    }   
+
+    .menu{ 
+        width:40px; 
+        height:32px; 
+        display:grid; 
+        gap:6px; 
+        cursor:pointer; 
+    }
+
+    .menu span{ 
+        background:var(--brand); 
+        height:4px; 
+        border-radius:2px; 
+        display:block; 
+    }
+
+    /* --- Right Drawer --- */
+    .drawer{
+      position:fixed; inset:0; z-index:999; 
+      pointer-events:none;
+    }
+    .drawer.open{ pointer-events:auto; }
+
+    .drawer-backdrop{
+      position:absolute; inset:0;
+      background:rgba(0,0,0,.35);
+      opacity:0; transition:opacity .25s ease;
+    }
+    .drawer.open .drawer-backdrop{ opacity:1; }
+
+    /* Panel */
+    .drawer-panel{
+      position:absolute; top:0; right:0; height:100%;
+      width:min(420px, 60vw);
+      background:#fff;
+      border-left:2px solid var(--brand-dark);
+      box-shadow:-8px 0 24px rgba(0,0,0,.15);
+      transform:translateX(100%);
+      transition:transform .28s ease;
+
+      /* wichtig: klassisches Layout */
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open .drawer-panel{ transform:translateX(0); }
+
+    /* Kopf */
+    .drawer-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 16px; border-bottom:1px solid var(--divider);
+    }
+    .drawer-close{
+      border:0; background:transparent; font-size:28px; line-height:1;
+      cursor:pointer; color:var(--brand-dark);
+    }
+
+    /* Navigation */
+    .drawer-nav{
+      display:flex;
+      flex-direction:column;
+      padding:12px 8px 24px;
+      gap:10px;
+
+    /* entscheidend: nimmt *den restlichen Platz* ein */
+      flex:1 1 auto;
+      overflow-y:auto;
+    }
+    .drawer-nav a{
+      display:block;
+      padding:14px 18px;
+      font-size:22px;
+      color:#2b2b2b;
+      text-decoration:none;
+    }
+    .drawer-nav a:hover{
+      background:#f5f5f5;
+    }
+
+    .drawer-nav .nav-img{
+      padding:14px 18px;
+      text-align:left;
+    }
+    .drawer-nav .nav-img img{
+      height:32px;
+      width:auto;
+      vertical-align:middle;
+    }
+
+    /* Footer — unten fixiert */
+    .drawer-footer{
+      flex-shrink:0;              /* klassisch: bleibt stehen */
+      text-align:center;
+      font-size:0.85rem;
+      color:#999;
+      padding:12px 0 16px;
+      border-top:1px solid #eee;
+      margin-top:auto;            /* drückt ihn nach unten */
+    }
+
+    .drawer-footer small{
+      display:block;
+      opacity:0.7;
+      margin-bottom:10px;
+    }
+    .drawer-footer small:last-child{
+      margin-bottom:0;
+    }
+
+
+    /* Optional: Hintergrund nicht scrollen, wenn offen */
+    .body-no-scroll{ overflow:hidden; }
+
+    main{ 
+        max-width:720px; 
+        margin:0 auto; 
+        padding:8px 16px 40px; 
+    }
+
+    .hello{ 
+        font-size: 23px;
+        margin:16px 0 24px; 
+        color: #9aa0a6;
+    }
+
+    /*Sektion zu link machen*/
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    a section {
+      display: block;
+      cursor: pointer;
+    }
+
+    /* Kartenliste */
+    .top-card{
+      display:grid; 
+      grid-template-columns:84px 1fr; 
+      gap:14px; 
+      align-items:center;
+      padding:18px 12px; 
+      border-radius:16px; 
+      border:1px solid var(--divider);
+      background:#fff; 
+      box-shadow:0 1px 0 rgba(0,0,0,.04);
+      margin-top: 30px;
+    }
+    .card{
+      display:grid; 
+      grid-template-columns:84px 1fr; 
+      gap:14px; 
+      align-items:center;
+      padding:18px 12px; 
+      border-radius:16px; 
+      border:1px solid var(--divider);
+      background:#fff; 
+      box-shadow:0 1px 0 rgba(0,0,0,.04);
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+
+    .icon-wrap{
+      width:84px; 
+      height:84px; 
+      border-radius:12px; 
+      background: #ececec;; 
+      display:flex; align-items:center; 
+      justify-content:center; 
+      border:1px solid var(--divider);
+    }
+
+    .icon-wrap img{ 
+        width:64px; 
+        height:64px; 
+        object-fit:contain; 
+    }
+
+    .top-card h2{ 
+        margin:0; 
+        font-size:28px; 
+        font-weight:900; 
+        letter-spacing:.5px; 
+        color:#8c0f24; 
+    }
+
+    .card h2{ 
+        margin:0; 
+        font-size:28px; 
+        font-weight:900; 
+        letter-spacing:.5px; 
+        color:#8c0f24; 
+    }
+
+    .top-card .subtitle{ 
+        margin-top:2px; 
+        font-size:28px; 
+        font-weight:800; 
+        color:#ff054a; 
+        letter-spacing:.5px; 
+    }
+
+    .card .subtitle{ 
+        margin-top:2px; 
+        font-size:28px; 
+        font-weight:800; 
+        color:#ff054a; 
+        letter-spacing:.5px; 
+    }
+
+    /* ausgegraute Variante */
+    .is-disabled h2, .is-disabled .subtitle{ 
+        color:#bfbfbf; 
+    }
+
+    .is-disabled .history-link a{ 
+        color:#cfcfcf; 
+        border-color:#efefef; 
+    }
+
+    /* Verlauf-Link unter den Karten */
+    .history-link a{
+      display:inline-flex; 
+      align-items:center; 
+      gap:12px;
+      font-weight:900; 
+      letter-spacing:.5px; 
+      text-decoration:none; 
+      color:var(--brand);
+      padding:10px 14px; 
+      border-radius:999px; 
+      border:1px solid var(--brand); 
+      background:#fff;
+    }
+    .history-link a:hover{ 
+        background:var(--brand); 
+        color:#fff; }
+
+    .history-icon{
+      width:22px; 
+      height:22px; 
+      border-radius:6px; 
+      border:2px solid currentColor; 
+      display:inline-block;
+    }
+
+    .TextField {
+      border: 1px solid var(--brand);
+      padding: 10px 12px;
+      border-radius: 999px;
+      display: flex;
+      justify-content: flex-start;
+      width: fit-content;
+      margin: 12px auto 30px;   /* oben 12px, links/rechts auto, unten 30px */
+      background: #fff;
+    }
+
+    /* Formular sauber neben­einander */
+    .TextField form {
+        display: flex;
+        gap: 8px;
+        margin: 0;
+    }
+
+    /* Eingabefeld */
+    .TextField input {
+        padding: 8px 12px;
+        border-radius: 999px;                /* leicht kleiner als außen */
+        border: 1px solid var(--brand);
+        background: #fff;
+        color: #2b2b2b;
+        font-size: 17px;
+    }
+
+    .TextField input:focus {
+        outline: none;
+        border-color: var(--brand-dark);
+    }
+
+    /* Button */
+    .TextField button {
+        padding: 8px 14px;
+        border: 1px solid var(--brand);
+        border-radius: 999px;
+        background: var(--brand-dark);        /* normal weiß */
+        color: #fff;        /* Markenrot als Text */
+        cursor: pointer;
+        font-weight: 700;
+        letter-spacing: .3px;
+        transition: background .12s ease, color .12s ease, transform .12s ease;
+    }
+
+    /* Beim Klicken */
+    .TextField button:active {
+        background: var(--brand);   /* roter Klick-Effekt */
+        color: var(--brand-dark);             /* weißer Text */
+        transform: scale(0.97);     /* gedrückt */
+        box-shadow: inset 0 2px 4px rgba(0,0,0,.2);
+    }
+
+
+
+
+    hr.sep{ 
+        border:none; 
+        border-top:1px solid var(--divider); 
+        margin:16px 0; 
+    }
+
+    .footer {
+      position: relative;
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .footer-icon {
+      height: 30px; /* anpassen nach Bedarf */
+      vertical-align: middle;
+      background: #fff; /* sorgt dafür, dass die Linien hinter dem PNG weg sind */
+      padding: 0 10px;
+    }
+
+    .footer::before,
+    .footer::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 45%;
+      height: 1px;
+      background: #ccc; /* feines Grau */
+    }
+
+    .footer::before {
+      left: 0;
+    }
+
+    .footer::after {
+      right: 0;
+    }
+
+
+    /* Proportionale Verkleinerung auf kleinen Displays – alles bleibt im Verhältnis */
+    @media (max-width: 420px) {
+      :root { --m: .85; } /* Skalierungsfaktor: 0.85 = 85% der Originalgrößen */
+
+      .appbar-inner { padding: calc(18px*var(--m)) calc(16px*var(--m)); }
+      .brand img { width: calc(44px*var(--m)); height: calc(44px*var(--m)); }
+      .brand .title .top { font-size: calc(28px*var(--m)); }
+      .brand .title .sub { font-size: calc(24px*var(--m)); }
+
+      .menu { width: calc(40px*var(--m)); height: calc(32px*var(--m)); gap: calc(6px*var(--m)); }
+      .menu span { height: calc(4px*var(--m)); border-radius: calc(2px*var(--m)); }
+
+      main { padding: 8px calc(16px*var(--m)) calc(40px*var(--m)); }
+
+      .hello { font-size: calc(23px*var(--m)); margin: calc(16px*var(--m)) 0 calc(24px*var(--m)); }
+
+      .top-card,
+      .card {
+        grid-template-columns: calc(84px*var(--m)) 1fr;
+        gap: calc(14px*var(--m));
+        padding: calc(18px*var(--m)) calc(12px*var(--m));
+        border-radius: calc(16px*var(--m));
+        margin-top: calc(30px*var(--m));
+        margin-bottom: calc(30px*var(--m));
+      }
+
+      .icon-wrap { width: calc(84px*var(--m)); height: calc(84px*var(--m)); border-radius: calc(12px*var(--m)); }
+      .icon-wrap img { width: calc(64px*var(--m)); height: calc(64px*var(--m)); }
+
+      .card h2 { font-size: calc(28px*var(--m)); }
+      .card .subtitle { font-size: calc(28px*var(--m)); }
+
+      .history-link a {
+        gap: calc(12px*var(--m));
+        padding: calc(10px*var(--m)) calc(14px*var(--m));
+        border-radius: 999px;
+      }
+      .history-icon {
+        width: calc(22px*var(--m));
+        height: calc(22px*var(--m));
+        border-width: calc(2px*var(--m));
+        border-radius: calc(6px*var(--m));
+      }
+      .TextField form { gap: calc(8px*var(--m)); }
+      .TextField input {
+        padding: calc(8px*var(--m)) calc(12px*var(--m));
+        font-size: calc(16px*var(--m));
+        border-radius: 999px;
+      }
+      .TextField button { padding: calc(8px*var(--m)) calc(14px*var(--m)); }
+
+      hr.sep { margin: calc(16px*var(--m)) 0; }
+
+      .footer { margin: calc(40px*var(--m)) 0; }
+      .footer-icon { height: calc(30px*var(--m)); padding: 0 calc(10px*var(--m)); }
+      .footer::before, .footer::after { height: 1px; } /* bleibt fein */
+    }
+
+  </style>
+</head>
+<body>
+    <!-- Kopfzeile -->
+    <header class="appbar" role="banner">
+        <div class="appbar-inner">
+            <div class="brand">
+                <!-- Logo-Platzhalter -->
+                <img src="images/info.png" alt="Logo" />
+                <div class="title">
+                    <div class="top">INFO</div>
+                    <div class="sub">HUB – NL09</div>
+                </div>
+            </div>
+            <!-- Hamburger -->
+            <div class="menu" aria-label="Menü"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="drawer" class="drawer" aria-hidden="true">
+        <div class="drawer-backdrop" data-close></div>
+
+        <aside class="drawer-panel" role="dialog" aria-label="Hauptmenü">
+            <header class="drawer-head">
+                <div class="user">
+                    <!-- optional: Avatar/Name -->
+                    <strong>Menü</strong>
+                </div>
+                <button class="drawer-close" type="button" aria-label="Schließen" data-close>×</button>
+            </header>
+
+            <nav class="drawer-nav">
+                <a href="index.html" class="nav-img">
+                    <img src="images/InfoHubFull.png" alt="Home">
+                </a>
+
+                <a href="https://apps.powerapps.com/play/e/default-2a806850-56cc-41fc-a677-4dbc75faadc8/a/94990c0a-755a-41e2-a443-1aed2cb755c4?tenantId=2a806850-56cc-41fc-a677-4dbc75faadc8&hint=5529b549-c697-4f23-a113-69b3e00ce833&sourcetime=1753857134493&skipMobileRedirect=1"
+                    class="nav-img"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                   <img src="images/SalesHubFull.png" alt="SalesHub öffnen">
+                </a>
+
+                <a href="help.html">Hilfe & Support</a>
+      
+            </nav>
+
+            <!-- Dezent platzierter Footer-Text -->
+            <div class="drawer-footer">
+                <small>Idee, Konzeption & Umsetzung 2025<br>Justus L. Merkel</small>
+                <small>Designvorlage<br>Konstantinos Christoulakis<br>NL09 ⋅ Gerhard D. Wempe GmbH & Co. KG<br>Weinstraße 11, 80333 München</small>
+            </div>
+
+        </aside>
+    </div>
+
+  <main>
+    <div class="hello">Servus!</div>
+
+  <script>
+    const el = document.querySelector('.hello');
+    const stunde = new Date().getHours();
+
+    if (stunde >= 18 && stunde < 24) {
+      el.textContent = 'Scheena Abend!';
+    } else {
+      el.textContent = 'Servus!';
+    }
+  </script>
+
+    <!-- Karte: Niederlassungs Terminplaner -->
+    <section>
+      <a href="search.html">
+      <div class="top-card">
+        <div class="icon-wrap">
+          <img src="images/watch.png" alt="Kalender-Icon" />
+        </div>
+        <div>
+          <h2>MOBILE</h2>
+          <div class="subtitle">ARTIKEL-INFO</div>
+        </div>
+      </div>
+      </a>
+      <div class="TextField">
+        <form onsubmit="goToArticle(event)">
+            <input type="text" id="articleNumber" placeholder="00XX0000">
+            <button type="submit" >ARTIKELNUMMER SCHNELLSUCHE</button>
+        </form>
+      </div>
+      <hr class="sep" />
+    </section>
+
+    <!-- Karte: Posteingangs-Erfassung -->
+    <a href="search.html">
+    <section>
+      <div class="card">
+        <div class="icon-wrap">
+            <img src="images/map.png" alt="Posteingang-Icon" />
+        </div>
+        <div>
+          <h2>NIEDERLASSUNGS</h2>
+          <div class="subtitle">INFO</div>
+        </div>
+      </div>
+      <hr class="sep" />
+    </section>
+    </a>
+
+    <!-- Karte: Posteingangs-Erfassung -->
+    <a href="search.html">
+    <section>
+      <div class="card">
+        <div class="icon-wrap">
+            <img src="images/gear.png" alt="Posteingang-Icon" />
+        </div>
+        <div>
+          <h2>WEITERE</h2>
+          <div class="subtitle">RESSOURCEN</div>
+        </div>
+      </div>
+      <hr class="sep" />
+    </section>
+    </a>
+
+  </main>
+
+  <footer class="footer">
+    <img src="images/logo.png" alt="" class="footer-icon">
+  </footer>
+
+  <script>
+    function goToArticle(event) {
+        event.preventDefault();
+        const num = document.getElementById('articleNumber').value.trim();
+        if (num) {
+            window.location.href = `https://www.wempe.com/de-de/search?sSearch=${encodeURIComponent(num)}`;
+        }
+    }
+   </script>
+
+   <script>
+        (function(){
+        const drawer  = document.getElementById('drawer');
+        const menuBtn = document.querySelector('.menu');     // Button oben rechts
+        const closers = drawer.querySelectorAll('[data-close]');
+
+        function openDrawer(){
+            drawer.classList.add('open');
+            document.body.classList.add('body-no-scroll');
+            drawer.setAttribute('aria-hidden','false');
+        }
+        function closeDrawer(){
+            drawer.classList.remove('open');
+            document.body.classList.remove('body-no-scroll');
+            drawer.setAttribute('aria-hidden','true');
+        }
+        function toggleDrawer(){
+            drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+        }
+
+        // Klick & Tastatur
+        menuBtn.addEventListener('click', toggleDrawer);
+        menuBtn.addEventListener('keydown', (e)=>{
+            if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleDrawer(); }
+        });
+
+        closers.forEach(el => el.addEventListener('click', closeDrawer));
+        document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeDrawer(); });
+    })();
+</script>
+
+
+</script>
+</body>
+</html>
