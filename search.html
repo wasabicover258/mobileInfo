@@ -101,7 +101,7 @@
         display: inline-block;
         width: 100%;
         max-width: 580px; /* falls gewünscht */
-        border: 1px solid #222;
+        border: 1px solid #a6a6a6;
         border-radius: 0;       /* wie in deiner Vorlage: eckig */
         background: #fff;
         overflow: hidden;       /* schneidet sauber ab, nix ragt raus */
@@ -144,7 +144,7 @@
         top: 0; right: 0;
         width: 50px;
         height: 100%;
-        background: #d8001f;    /* Wempe-Rot */
+        background: #8c0e24;    /* Wempe-Rot */
         z-index: 2;             /* über dem Select */
         pointer-events: none;   /* Klicks gehen durch zum Select */
     }
@@ -166,7 +166,7 @@
     .custom-select::before{
         content: "";
         position: absolute;
-        top: 50%; right: 16px;
+        top: 50%; right: 18px;
         width: 10px; height: 10px;
         border-right: 3px solid #fff;
         border-bottom: 3px solid #fff;
@@ -181,7 +181,65 @@
         outline-offset: 2px;
     }
 
-    input[type="text"]{min-width:300px;padding:10px 12px;border-radius:10px;border:1px solid #d0d0d0;background:#fff;font-size:1rem;}
+    /* Eingabefeld soll nicht mehr aus dem Layout schieben */
+    input[type="text"] {
+        min-width: 0;      /* statt 300px */
+        width: 100%;
+        height: 25px;
+    }
+
+    /* Der gemeinsame Kasten um Input + Button */
+    .search-inline{
+        display:flex;
+        align-items:stretch;
+        width:100%;
+        border:1px solid #a6a6a6;   /* gleicher Rand wie bei deinen Dropdowns */
+        overflow:hidden;             /* alles im Rahmen, nix ragt raus */
+        background:#fff;
+        box-sizing:border-box;
+    }
+
+    /* Input IM KASTEN: kein eigener Rand/Radius/Margin */
+    .search-inline input[type="text"]{
+        flex:1 1 auto;
+        width:100%;
+        border:0 !important;
+        border-radius:0 !important;
+        margin:0;
+        padding:12px 14px;
+        font-size:16px;
+        background:#fff;
+        outline:0;
+    }
+
+    /* Rechter Button IM KASTEN: keine Pille, fixe Breite */
+    .search-inline #kwBtn{
+        flex:0 0 5px;
+        width:56px !important;              /* schlägt .row button { width:100% } */
+        border:0;
+        border-radius:0 !important;         /* bündiger Abschluss zum Rahmen */
+        margin:0;
+        padding:0;
+        background:#8c0e24;
+        color:transparent;                  /* Text bleibt für Screenreader */
+        position:relative;
+    }
+
+    /* Weißer Chevron im Button */
+    .search-inline #kwBtn::before{
+        content:"";
+        position:absolute;
+        top:50%; left:42%;
+        width:10px; height:10px;
+        border-right:3px solid #fff;
+        border-bottom:3px solid #fff;
+        transform:translate(-40%,-50%) rotate(-45deg);
+    }
+
+    /* Disabled nicht ausgrauen – sonst wirkt es „außerhalb“ */
+    .search-inline #kwBtn:disabled{ opacity:1; background:#8c0e24; }
+
+
     button{padding:12px 18px;border-radius:999px;border:0;background:#8c0e24;color:#fff;font-weight:600;cursor:pointer;}
     button:disabled{opacity:.5;cursor:not-allowed;}
     .hint{margin-top:12px;font-size:.9rem;color:#666;}
@@ -213,69 +271,73 @@
 </header>
 
 <main>
-  <!-- Toggle -->
-  <div class="toggle-wrap">
-    <div class="toggle" role="switch" aria-checked="false" tabindex="0" data-state="uhren" aria-label="Auswahl: UHREN oder SCHMUCK">
-      <div class="track">
-        <div class="slider"><span class="active">UHREN</span></div>
-      </div>
+    <!-- Toggle -->
+    <div class="toggle-wrap">
+        <div class="toggle" role="switch" aria-checked="false" tabindex="0" data-state="uhren" aria-label="Auswahl: UHREN oder SCHMUCK">
+        <div class="track">
+            <div class="slider"><span class="active">UHREN</span></div>
+        </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Uhren-Hauptsuche -->
-  <div id="uhrenSearch" class="card">
-    <h2>MODELLSUCHE</h2>
-    <div class="row">
+    <!-- Uhren-Hauptsuche -->
+    <div id="uhrenSearch" class="card">
+        <h2>MODELLSUCHE</h2>
+        <div class="row">
 
-        <div>
-            <label for="brand">MARKE*</label>
-            <div class="custom-select">
-                <select id="brand">
-                    <option value=""></option>
-                </select>
+            <div>
+                <label for="brand">MARKE*</label>
+                <div class="custom-select">
+                    <select id="brand">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label for="collection">KOLLEKTION</label>
+                <div class="custom-select">
+                    <select id="collection" disabled>
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button id="searchBtn" disabled>Suche</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Schmuck-Platzhalter (steht ÜBER der Stichwortsuche) -->
+    <div id="schmuckPlaceholder" class="card hidden" style="margin-top:16px;">
+        <p>Schmuck – (Platzhalter). Hier kommt später deine Schmucksuche/Navigation hin.</p>
+    </div>
+
+    <!-- Stichwortsuche -->
+    <div class="card">
+        <div class="row">
+            <div>
+                <h2>STICHWORTSUCHE</h2>
+
+                <!-- NEU: angedockte Suche -->
+                <div class="search-inline">
+                    <input type="text" id="kw" placeholder="Begriff eingeben…" />
+                    <button id="kwBtn" disabled>Suchen</button>
+                </div>
             </div>
         </div>
 
-        <div>
-            <label for="collection">KOLLEKTION</label>
-            <div class="custom-select">
-                <select id="collection" disabled>
-                    <option value=""></option>
-                </select>
+        <!-- Schnell-Buttons (werden je nach Modus umgeschaltet) -->
+        <div class="card" style="margin-top:16px;">
+            <div id="quickRow" class="row" style="flex-wrap:wrap;">
+                <button id="quick1">GMT</button>
+                <button id="quick2">Taucher</button>
+                <button id="quick3">Chronograph</button>
             </div>
         </div>
-
-        <div>
-            <button id="searchBtn" disabled>Suche</button>
-        </div>
-
-        </div>
     </div>
-
-  <!-- Schmuck-Platzhalter (steht ÜBER der Stichwortsuche) -->
-  <div id="schmuckPlaceholder" class="card hidden" style="margin-top:16px;">
-    <p>Schmuck – (Platzhalter). Hier kommt später deine Schmucksuche/Navigation hin.</p>
-  </div>
-
-  <!-- Stichwortsuche -->
-  <div class="card">
-    <div class="row">
-      <div>
-        <h2>STICHWORTSUCHE</h2>
-        <input type="text" id="kw" placeholder="Begriff eingeben…" />
-      </div>
-      <div><button id="kwBtn" disabled>Suchen</button></div>
-    </div>
-
-    <!-- Schnell-Buttons (werden je nach Modus umgeschaltet) -->
-    <div class="card" style="margin-top:16px;">
-      <div id="quickRow" class="row" style="flex-wrap:wrap;">
-        <button id="quick1">GMT</button>
-        <button id="quick2">Taucher</button>
-        <button id="quick3">Chronograph</button>
-      </div>
-    </div>
-  </div>
 </main>
 
 <script>
