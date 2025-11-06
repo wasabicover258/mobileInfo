@@ -6,10 +6,10 @@
   <title>InfoHub</title>
 
   <!-- Favicons & Touch Icons -->
-  <link rel="apple-touch-icon" sizes="180x180" href="images/favicons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicons/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/favicons/favicon-16.png">
-  <link rel="shortcut icon" href="images/favicons/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="shortcut icon" href="favicon.ico">
   <meta name="theme-color" content="#8c0e24">
 
   <style>
@@ -100,7 +100,7 @@
     /* Panel */
     .drawer-panel{
       position:absolute; top:0; right:0; height:100%;
-      width:min(420px, 65vw);
+      width:min(420px, 60vw);
       background:#fff;
       border-left:2px solid var(--brand-dark);
       box-shadow:-8px 0 24px rgba(0,0,0,.15);
@@ -373,7 +373,7 @@
     hr.sep{ 
         border:none; 
         border-top:1px solid var(--divider); 
-        margin:16px 0; 
+        margin: 1px; 
     }
 
     .footer {
@@ -457,12 +457,6 @@
         border-radius: 999px;
       }
       .TextField button { padding: calc(8px*var(--m)) calc(14px*var(--m)); }
-
-      hr.sep { margin: calc(16px*var(--m)) 0; }
-
-      .footer { margin: calc(40px*var(--m)) 0; }
-      .footer-icon { height: calc(30px*var(--m)); padding: 0 calc(10px*var(--m)); }
-      .footer::before, .footer::after { height: 1px; } /* bleibt fein */
     }
 
   </style>
@@ -634,9 +628,6 @@
         closers.forEach(el => el.addEventListener('click', closeDrawer));
         document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeDrawer(); });
     })();
-</script>
-
-
 </script>
 </body>
 </html>
