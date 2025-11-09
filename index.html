@@ -257,48 +257,10 @@
 
     /* Überlauf verhindern – Text wird nie aus Karte gedrückt */
     .card h2,
-    .card .subtitle,
-    .top-card h2,
-    .top-card .subtitle {
+    .card .subtitle {
         line-height: 1.1;
         word-wrap: break-word;
         overflow-wrap: anywhere;
-    }
-
-    /* ausgegraute Variante */
-    .is-disabled h2, .is-disabled .subtitle{ 
-        color:#bfbfbf; 
-    }
-
-    .is-disabled .history-link a{ 
-        color:#cfcfcf; 
-        border-color:#efefef; 
-    }
-
-    /* Verlauf-Link unter den Karten */
-    .history-link a{
-      display:inline-flex; 
-      align-items:center; 
-      gap:12px;
-      font-weight:900; 
-      letter-spacing:.5px; 
-      text-decoration:none; 
-      color:var(--brand);
-      padding:10px 14px; 
-      border-radius:999px; 
-      border:1px solid var(--brand); 
-      background:#fff;
-    }
-    .history-link a:hover{ 
-        background:var(--brand); 
-        color:#fff; }
-
-    .history-icon{
-      width:22px; 
-      height:22px; 
-      border-radius:6px; 
-      border:2px solid currentColor; 
-      display:inline-block;
     }
 
     /* TextField – bleibt immer innerhalb des Bildschirms */
@@ -408,7 +370,7 @@
         transition: background .2s ease;
     }
     .modal-box button:active {
-    background: var(--brand);
+        background: var(--brand);
     }
 
     hr.sep{ 
@@ -418,33 +380,33 @@
     }
 
     .footer {
-      position: relative;
-      text-align: center;
+        position: relative;
+        text-align: center;
     }
 
     .footer-icon {
-      height: 30px; /* anpassen nach Bedarf */
-      vertical-align: middle;
-      background: #fff; /* sorgt dafür, dass die Linien hinter dem PNG weg sind */
-      padding: 0 10px;
+        height: 30px; /* anpassen nach Bedarf */
+        vertical-align: middle;
+        background: #fff; /* sorgt dafür, dass die Linien hinter dem PNG weg sind */
+        padding: 0 10px;
     }
 
     .footer::before,
     .footer::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      width: 45%;
-      height: 1px;
-      background: #ccc; /* feines Grau */
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 45%;
+        height: 1px;
+        background: #ccc; /* feines Grau */
     }
 
     .footer::before {
-      left: 0;
+        left: 0;
     }
 
     .footer::after {
-      right: 0;
+        right: 0;
     }
 
   </style>
