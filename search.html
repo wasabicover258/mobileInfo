@@ -80,7 +80,10 @@
         background:#fff;
         border-radius:14px;
         box-shadow:0 2px 16px rgba(0,0,0,.06);
-        padding: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 7px;
+        padding-bottom: 7px;
         border:1px solid var(--divider);
     }
 
@@ -105,13 +108,15 @@
         display: flex;           /* eigenes Flex-Layout */
         flex-direction: row;     /* Spalten-Regel überschreiben */
         gap: 5px;
-        flex-wrap: wrap;         /* darf umbrechen, wenn wenig Platz */
+        flex-wrap: wrap;
+        margin-top: 7px;         /* darf umbrechen, wenn wenig Platz */
     }
 
     /* Buttons im quickRow nicht full-width */
     #quickRow button {
         width: auto;             /* überschreibt .row button { width:100% } */
         flex: 0 0 calc(50% - 10px);             /* gleich breit auf einer Zeile */
+        font-size: 4vw;
     }
 
     /* (optional) ab kleiner Breite 2 pro Zeile erzwingen */
@@ -121,6 +126,10 @@
 
     #quickRow::-webkit-scrollbar {
         display: none;
+    }
+
+    a {
+      text-decoration: none;
     }
 
     /* --- Right Drawer --- */
@@ -232,7 +241,7 @@
         border: 1px solid #a6a6a6;
         border-radius: 0;       /* wie in deiner Vorlage: eckig */
         background: #fff;
-        overflow: hidden;       /* schneidet sauber ab, nix ragt raus */
+        overflow: hidden;     /* schneidet sauber ab, nix ragt raus */
     }
 
     /* Native Deko abschalten, Select vollflächig */
@@ -543,7 +552,7 @@
 
     <!-- Schmuck-Hauptsuche -->
     <div id="schmuckSearch" class="card hidden" style="margin-top:16px;">
-      <h2>MODELLSUCHE SCHMUCK</h2>
+      <h2>MODELLSUCHE</h2>
       <div class="row">
         <div>
           <label for="jBrand">MARKE*</label>
@@ -585,14 +594,12 @@
         </div>
 
         <!-- Schnell-Buttons (werden je nach Modus umgeschaltet) -->
-        <div class="card" style="margin-top:16px;">
-            <div id="quickRow" class="row" style="flex-wrap:wrap;">
-                <button id="quick1">GMT</button>
-                <button id="quick2">Taucher</button>
-                <button id="quick3">Chronograph</button>
-                <button id="quick4">Flieger</button>
-            </div>
-        </div>
+          <div id="quickRow" class="row" style="flex-wrap:wrap;">
+              <button id="quick1">GMT</button>
+              <button id="quick2">Taucher</button>
+              <button id="quick3">Chronograph</button>
+              <button id="quick4">Flieger</button>
+          </div>
     </div>
 
     <footer class="footer">
